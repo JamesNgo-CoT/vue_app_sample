@@ -1,0 +1,31 @@
+//The main scss file for vue_app_sample.
+
+//IMPORTANT:
+// Any resources from this project should be referenced using SRC_PATH preprocessor var
+// Ex: background-image: url(/* @echo SRC_PATH*//img/sample.jpg)
+
+.authButtonComponent {
+  position: absolute;
+  right: 60px;
+  top: 10px;
+}
+
+#maincontent #vue_app_sample_container,
+#vue_app_sample_container {
+
+  // ---------------------------------------------------------------------------
+
+  &.loginPage {
+    .cot-form {
+      p {
+        margin-bottom: 0;
+      }
+
+      button.btn-login {
+        margin: 0;
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+}

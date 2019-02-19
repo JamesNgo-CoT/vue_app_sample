@@ -1,0 +1,67 @@
+<!--
+IMPORTANT:
+Any resources from this project should be referenced using SRC_PATH preprocessor var.
+See examples below in the boilerplate code
+-->
+
+<!-- cot-app:head -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+<!--@exec startBuildTagWithCacheBuster('styles/main.css')-->
+<!-- core:css -->
+<!-- endinject -->
+<!-- place your application stylesheet references here: -->
+<link rel="stylesheet" type="text/css" href="<!-- @echo SRC_PATH -->/styles/main.css">
+<!-- endbuild -->
+<!--@exec startBuildTagWithCacheBuster('styles/core_print.css', 'media="print"')-->
+<!-- core_print:css -->
+<!-- endinject -->
+<!-- place any application print-only stylesheet references here -->
+<!-- endbuild -->
+<!-- cot-app:head end-->
+
+<!-- cot-app:body -->
+<div id="vue_app_sample_container"></div>
+<!-- cot-app:body end-->
+
+<!-- cot-app:footer -->
+<!--@exec startBuildTagWithCacheBuster('scripts/main.js')-->
+<!-- core:js -->
+<!-- endinject -->
+<!-- place your application script references here: -->
+
+<!-- Third Party -->
+<script type="text/javascript" src="../node_modules/vue/dist/vue.min.js"></script>
+
+<!-- CoT Extentions -->
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/lib/cotapp.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/lib/cotform.js"></script>
+
+<!-- Libraries -->
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/lib/consoleerror.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/lib/httprequest.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/lib/router.js"></script>
+
+<!-- Stores -->
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/stores/authstore.js"></script>
+
+<!-- Components -->
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/components/authbuttoncomponent.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/components/formcomponent.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/components/cotformcomponent.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/components/authformcomponent.js"></script>
+
+<!-- Pages -->
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/pagecomponents/loadingpagecomponent.js"></script>
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/pagecomponents/loginpagecomponent.js"></script>
+
+<script type="text/javascript" src="<!-- @echo SRC_PATH -->/scripts/main.js"></script>
+<!-- endbuild -->
+<!--@if ENV!='prod'-->
+<script type="text/javascript">
+  console.log('vue_app_sample running on <!--@echo ENV--> environment');
+  console.log('vue_app_sample qa release: <!--@echo QA_RELEASE-->');
+  console.log('vue_app_sample build: <!--@echo BUILD_ID-->');
+</script>
+<!--@endif-->
+<!-- cot-app:footer end-->
