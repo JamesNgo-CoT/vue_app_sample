@@ -17,7 +17,9 @@ const authButtonComponent = {
 
   methods: {
     onLogout() {
-      this.$el.getElementsByClassName('btn-logout')[0].setAttribute('disabled', '');
+      const logoutButton = this.$el.getElementsByClassName('btn-logout')[0];
+      logoutButton.innerHTML = /* */ `<i class="fas fa-spinner fa-spin"></i> Loggin out...`;
+      logoutButton.setAttribute('disabled', '');
       this.$emit('logout');
     }
   }
