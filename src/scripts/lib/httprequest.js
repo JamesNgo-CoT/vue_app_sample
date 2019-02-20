@@ -50,7 +50,7 @@ const httpRequest = {
         }
       }
 
-      this.request.send(data);
+      request.send(data);
     });
   }
 }

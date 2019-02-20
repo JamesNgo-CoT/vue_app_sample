@@ -14,14 +14,14 @@ const loginPageComponent = {
           <p>Aliquam a bibendum velit. Integer condimentum, lacus ut dapibus eleifend, mi tortor malesuada purus, vitae accumsan diam risus non nisl. Maecenas condimentum, quam in elementum bibendum, leo magna sollicitudin lacus, a pellentesque dolor neque a risus. In augue ante, eleifend at placerat congue, vulputate sit amet metus. Pellentesque eu ultrices elit. Quisque non viverra diam, eu gravida elit. Vivamus aliquam, lorem quis faucibus pretium, lectus orci pretium ex, condimentum congue mauris diam id arcu. Nunc non finibus nibh. Vestibulum vitae lacinia turpis. Donec efficitur, erat eu blandit lobortis, tellus diam rutrum magna, condimentum vehicula nunc risus ut dui. Suspendisse potenti. Mauris arcu felis, congue eu magna ac, bibendum pretium arcu. Donec cursus sit amet libero ut volutpat.</p>
         </div>
         <div class="col-xs-12 col-sm-6 col-md-4">
-          <authFormComponent v-on:success="success"></authFormComponent>
+          <authFormComponent v-on:success="onSuccess"></authFormComponent>
         </div>
       </div>
     </div>
   `,
 
   methods: {
-    success(formValue, authFormComponent) {
+    onSuccess(formValue, authFormComponent) {
       this.$emit('success', formValue, authFormComponent, this);
     }
   },

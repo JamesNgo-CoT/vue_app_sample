@@ -4,9 +4,9 @@
 // Ex: let myImage = '/*@echo SRC_PATH*//img/sample.jpg';
 
 /* global Vue */
-/* global consoleError router */
+/* global consoleError queryObjectToString queryStringToObject router */
 /* global authStore */
-/* global authButtonComponent textFieldComponent cotFormComponent */
+/* global authButtonComponent cotFormComponent */
 /* global loadingPageComponent loginPageComponent */
 
 $(function () {
@@ -40,18 +40,20 @@ $(function () {
   const lockIcon = document.querySelector('.securesite img');
   const authButtonElement = lockIcon.parentNode.insertBefore(document.createElement('div'), lockIcon);
 
-  new Vue({
+  const authButtonAuthUrlBase = '#login';
+  const authButtonVue = new Vue({
     el: authButtonElement,
     template: /* html */ `
       <authButtonComponent
         v-bind:isLoggedIn="isLoggedIn"
-        authUrl="#login"
+        v-bind:authUrl="authUrl"
         v-bind:user="state.userID"
-        v-on:logout="logout"
+        v-on:logout="onLogout"
         class="authButtonComponent"
       ></authButtonComponent>
     `,
     data: {
+      authUrl: authButtonAuthUrlBase,
       state: authStore.state
     },
     computed: {
@@ -60,9 +62,9 @@ $(function () {
       }
     },
     methods: {
-      logout() {
-        authStore.logout().finalize(() => {
-          router.route();
+      onLogout() {
+        authStore.logout().finally(() => {
+          router.restart();
         });
       }
     },
@@ -92,7 +94,18 @@ $(function () {
   routes.push({
     regExp: /^#login(\?.*)?$/,
     navigateTo({ match }) {
-      console.log('NAVIGATE TO LOGIN');
+      if (authStore.isLoggedIn()) {
+        const hashParts = match[0].split('?');
+        let redirect;
+        if (hashParts[1] == null) {
+          redirect = router.homeHash;
+        } else {
+          const redirectHash = queryStringToObject(hashParts[1]).redirect;
+          redirect = redirectHash != null && redirectHash.match(/^#login(\?.*)?$/) == null ? redirectHash : router.homeHash;
+        }
+        router.navigate({ hash: redirect, debug: true });
+        return;
+      }
 
       document.body.classList.add('login');
 
@@ -103,16 +116,19 @@ $(function () {
         ], true);
       }
 
-      // TODO Login
       pageVue.currentPage = {
         template: /* html */ `
           <loginPageComponent class="loginPage" v-on:success="onSuccess"></loginPageComponent>
         `,
         methods: {
-          onSuccess(formValue, authFormComponent, loginPageComponent) {
-            authFormComponent.reEnableButton();
-            authFormComponent.showError('this is an error');
-            console.log(formValue, authFormComponent, loginPageComponent);
+          onSuccess: ({ user, pwd }, authFormComponent, loginPageComponent) => {
+            authStore.login('vue_app_sample', user, pwd).then(() => {
+              router.restart();
+            }, (error) => {
+              authFormComponent.showError('this is an error', error);
+            }).finally(() => {
+              authFormComponent.reEnableButton();
+            });
           }
         },
         components: {
@@ -137,20 +153,9 @@ $(function () {
       }
 
       pageVue.currentPage = {
-        template: /* html */ `
-          <div>
-            <p v-for="thisValue in thisValues">
-              <textFieldComponent v-model="thisValue.val"></textFieldComponent>
-            </p>
-            
-            <p>{{ thisValues }}</p>
-          </div>
-        `,
-        data() {
-          return { thisValues: [{ val: 'test' }, { val: 'test2' }, { val: 'test3' }] }
-        },
+        template: /* html */ `<loadingPageComponent></loadingPageComponent>`,
         components: {
-          textFieldComponent
+          loadingPageComponent
         }
       };
     },
@@ -254,6 +259,10 @@ $(function () {
   router.homeHash = '#home';
 
   router.routes.unshift(...routes);
+
+  router.afterRoute = function() {
+    authButtonVue.authUrl = `${authButtonAuthUrlBase}?${queryObjectToString({ redirect: window.location.hash })}`;
+  };
 
   authStore.init().then((request) => {
     router.start();

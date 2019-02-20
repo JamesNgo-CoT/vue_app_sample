@@ -20,14 +20,22 @@ const router = {
 
       this.navigate({ hash: this.homeHash, triggerRoute: true })
     },
-    navigateFrom() {} 
+    navigateFrom() {}
   }],
+
+  beforeRoute: null,
+
+  afterRoute: null,
 
   route() {
     this.lastHash = this.currentHash;
     this.currentHash = window.location.hash;
 
     Promise.resolve().finally(() => {
+      if (typeof this.beforeRoute === 'function') {
+        return this.beforeRoute();
+      }
+    }).finally(() => {
       if (this.lastMatchedRoute != null && typeof this.lastMatchedRoute.navigateFrom === 'function') {
         return this.lastMatchedRoute.navigateFrom.call(this, { match: this.lastMatch });
       }
@@ -51,6 +59,10 @@ const router = {
 
       this.lastMatch = null;
       this.lastMatchedRoute = null;
+    }).finally(() => {
+      if (typeof this.afterRoute === 'function') {
+        return this.afterRoute();
+      }
     });
   },
 
@@ -59,8 +71,10 @@ const router = {
   triggerNextRoute: true,
 
   navigate({ hash, triggerRoute = true }) {
-    this.triggerNextRoute = triggerRoute;
-    window.location.hash = hash;
+    if (hash != null) {
+      this.triggerNextRoute = triggerRoute;
+      window.location.hash = hash;
+    }
   },
 
   // ---------------------------------------------------------------------------
@@ -74,12 +88,12 @@ const router = {
   },
 
   start() {
-    window.addEventListener('hashchange', () => { this.hashChangeListener(); });
+    window.addEventListener('hashchange', this.hashChangeListener.bind(this));
     this.route();
   },
 
   stop() {
-    window.removeEventListener('hashchange', () => { this.hashChangeListener(); });
+    window.removeEventListener('hashchange', this.hashChangeListener.bind(this));
   },
 
   restart() {

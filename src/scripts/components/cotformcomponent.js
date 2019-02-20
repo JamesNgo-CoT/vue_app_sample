@@ -24,15 +24,20 @@ const cotFormComponent = {
   },
 
   mounted() {
-    this.config.success = ((success) => ((...args) => {
+    const config = Object.assign({}, this.config);
+
+    config.success = ((success) => ((event) => {
       if (success != null) {
-        return success.call(this, ...args);
+        return success.call(this, event);
       }
+
+      event.preventDefault();
+      return false;
     }))(this.config.success);
 
     const choicesPromises = [];
-    for (let sectionsIndex = 0, sectionsLength = this.config.sections.length; sectionsIndex < sectionsLength; sectionsIndex++) {
-      const section = this.config.sections[sectionsIndex];
+    for (let sectionsIndex = 0, sectionsLength = config.sections.length; sectionsIndex < sectionsLength; sectionsIndex++) {
+      const section = config.sections[sectionsIndex];
 
       for (let rowsIndex = 0, rowsLength = section.rows.length; rowsIndex < rowsLength; rowsIndex++) {
         const row = section.rows[rowsIndex];
@@ -59,7 +64,7 @@ const cotFormComponent = {
     }
 
     Promise.all(choicesPromises).then(() => {
-      const cotForm = new CotForm(this.config);
+      const cotForm = new CotForm(config);
       cotForm.render({ target: this.$el });
       cotForm.setView(this);
 

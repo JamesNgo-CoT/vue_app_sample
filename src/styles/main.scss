@@ -10,13 +10,24 @@
   top: 10px;
 }
 
-#maincontent #vue_app_sample_container,
-#vue_app_sample_container {
+.login {
+  .authButtonComponent {
+    display: none;
+  }
+}
+
+#maincontent {
+  #vue_app_sample_container {
+  }
 
   // ---------------------------------------------------------------------------
 
-  &.loginPage {
+  .loginPage {
     .cot-form {
+      .alert {
+        margin-bottom: 0;
+      }
+
       p {
         margin-bottom: 0;
       }
@@ -26,6 +37,4 @@
       }
     }
   }
-
-  // ---------------------------------------------------------------------------
 }

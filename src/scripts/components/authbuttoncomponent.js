@@ -2,8 +2,8 @@
 const authButtonComponent = {
   template: /* html */ `
     <div>
-      <button v-if="isLoggedIn" type="button" class="btn btn-default" v-on:click="logout">
-        Logout<span v-if="authState.userID != null">: {{ user }}</span>
+      <button v-if="isLoggedIn" type="button" class="btn btn-default btn-logout" v-on:click="onLogout">
+        Logout<span v-if="user != null">: {{ user }}</span>
       </button>
       <a v-else v-bind:href="authUrl" class="btn btn-default">Login</a>
     </div>
@@ -16,7 +16,8 @@ const authButtonComponent = {
   },
 
   methods: {
-    logout() {
+    onLogout() {
+      this.$el.getElementsByClassName('btn-logout')[0].setAttribute('disabled', '');
       this.$emit('logout');
     }
   }

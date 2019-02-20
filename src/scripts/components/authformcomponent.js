@@ -11,6 +11,7 @@ const authFormComponent = {
 
         success(event) {
           event.preventDefault();
+          this.reEnableButton();
           this.$emit('success', this.formValue, this);
           return false
         },
@@ -20,16 +21,15 @@ const authFormComponent = {
 
           rows: [{
             fields: [{
-              class: 'field-error hide',
-              html: /* html */ ``,
-              type: 'html'
-            }]
-          }, {
-            fields: [{
-              className: 'authFormViewMessage col-xs-12',
               html: /* html */ `<p>Please use your novell login to continue</p>`,
               type: 'html',
               required: true
+            }]
+          }, {
+            fields: [{
+              class: 'fieldError col-xs-12 hide',
+              html: /* html */ ``,
+              type: 'html'
             }]
           }, {
             fields: [{
@@ -77,16 +77,14 @@ const authFormComponent = {
     },
 
     showError(html) {
-      console.log('SHOW ERROR');
-
       this.hideError();
-      const errorField = this.$el.getElementsByClassName('field-error')[0];
-      errorField.innerHTML = /* html */ `<div class="alert alert-danger" role="alert">${html}</div>`;
+      const errorField = this.$el.getElementsByClassName('fieldError')[0];
+      errorField.getElementsByTagName('div')[0].innerHTML = /* html */ `<div class="alert alert-danger" role="alert">${html}</div>`;
       errorField.classList.remove('hide');
     },
 
     hideError(html) {
-      this.$el.getElementsByClassName('field-error')[0].classList.add('hide');
+      this.$el.getElementsByClassName('fieldError')[0].classList.add('hide');
     }
   }
 }
