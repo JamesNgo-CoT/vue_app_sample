@@ -9,7 +9,7 @@ core.embeddedApp.createTasks(gulp, {
   deploymentPath: '',
   preprocessorContext: {
     local: {
-      AUTHAPI_V2_URL: 'https://was-intra-sit.toronto.ca/c3api_auth/v2/AuthService.svc/AuthSet'
+      AUTHAPI_V2_URL: 'https://maserati.corp.toronto.ca:49090/c3api_auth/v2/AuthService.svc/AuthSet'
     },
     dev: {},
     qa: {},
